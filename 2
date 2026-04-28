@@ -1,0 +1,58 @@
+install.packages("openxlsx")
+install.packages("DBI")
+install.packages("RSQLite")
+library(openxlsx)
+library(DBI)
+library(RSQLite)
+online_data <- data.frame(
+  CustomerID = c(1, 2, 3, 4, 5),
+  Age = c(25, 30, NA, 45, 40),
+  PurchaseAmount = c(1200, 1500, 1800, NA, 2000),
+  Membership = c("Gold", "Silver", "Gold", NA, "Silver"),
+  City = c("Chennai", "Bangalore", "Chennai", "Mumbai", NA)
+)
+wb <- createWorkbook()
+addWorksheet(wb, "OnlinePurchases")
+writeData(wb, "OnlinePurchases", online_data)
+saveWorkbook(wb, "online_purchases.xlsx", overwrite = TRUE)
+print(online_data)
+con <- dbConnect(SQLite(), "store_purchases.db")
+instore_data <- data.frame(
+  CustomerID = c(3, 4, 6, 7, 7),
+  Age = c(35, 45, 28, NA, NA),
+  PurchaseAmount = c(1600, 1700, 1400, 1300, 1300),
+  Membership = c("Gold", "Regular", "Silver", "Gold", "Gold"),
+  City = c("Chennai", "Mumbai", "Delhi", "Delhi", "Delhi")
+)
+dbWriteTable(con, "InStorePurchases", instore_data, overwrite = TRUE)
+dbDisconnect(con)
+print(instore_data)
+excel_df <- read.xlsx("online_purchases.xlsx")
+con <- dbConnect(SQLite(), "store_purchases.db")
+db_df <- dbReadTable(con, "InStorePurchases")
+dbDisconnect(con)
+customer_data <- rbind(excel_df, db_df)
+print(customer_data)
+str(customer_data)
+summary(customer_data)
+colSums(is.na(customer_data))
+sum(duplicated(customer_data))
+table(customer_data$Membership)
+table(customer_data$City)
+numerical_data <- customer_data[, sapply(customer_data, is.numeric)]
+categorical_data <- customer_data[, sapply(customer_data, is.character) |
+                                    sapply(customer_data, is.factor)]
+print(numerical_data)
+print(categorical_data)
+numerical_data$Age[is.na(numerical_data$Age)] <-
+  mean(numerical_data$Age, na.rm = TRUE)
+numerical_data$PurchaseAmount[is.na(numerical_data$PurchaseAmount)] <-
+  mean(numerical_data$PurchaseAmount, na.rm = TRUE)
+categorical_data$Membership[is.na(categorical_data$Membership)] <-
+  "Regular"
+categorical_data$City[is.na(categorical_data$City)] <- "Unknown"
+final_data <- cbind(numerical_data, categorical_data)
+final_data <- final_data[!duplicated(final_data), ]
+final_data$Membership <- factor(final_data$Membership)
+final_data$City <- factor(final_data$City)
+print(final_data)
