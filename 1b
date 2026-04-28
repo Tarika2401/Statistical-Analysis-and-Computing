@@ -1,0 +1,16 @@
+marks=as.integer(readline("enter student marks:"))
+if(marks >= 90){
+  grade="A"
+}else if (marks >=75){
+  grade = "B"
+}else if (marks >= 50){
+  grade = "C"
+}else{
+  grade=" F"
+}
+cat("Grade assigned :",grade,"\n")
+feedback=switch(grade,"A"="excellent performance",
+                "B"="good performance",
+                "C "="Average performance",
+                "F" ="Needs improvement")
+cat("Feedback:",feedback,"\n")
