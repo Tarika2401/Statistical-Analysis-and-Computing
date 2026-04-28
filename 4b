@@ -1,0 +1,16 @@
+data("iris")
+print("First few rows:")
+print(head(iris))
+train_index=createDataPartition(iris$Species,p=0.8,list=FALSE)
+train_data=iris[train_index,]
+test_data=iris[-train_index,]
+print(nrow(train_data))
+print(nrow(test_data))
+tree_model=rpart(Species ~ .,data=train_data,method="class")
+print(tree_model)
+rpart.plot(tree_model,main="Decision Tree ",type=3,extra=101,under=TRUE,tweak=1.2,box.palette = "RdBu")
+predictions=predict(tree_model,test_data,type="class")
+conf_matrix=confusionMatrix(predictions,test_data$Species)
+cat("Confusion Matrix:")
+print(conf_matrix)
+cat("Accuracy:",conf_matrix$overall['Accuracy'])
