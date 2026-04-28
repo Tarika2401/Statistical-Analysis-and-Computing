@@ -1,0 +1,14 @@
+install.packages("factoextra")
+install.packages("cluster")
+data(iris)
+iris_data <- iris[, -5]
+head(iris_data)
+fviz_nbclust(iris_data, kmeans, method = "wss") + ggtitle("Elbow method for optimal K")
+set.seed(123)
+kmeans_model <- kmeans(iris_data, centers = 3, nstart = 25)
+kmeans_model$centers
+kmeans_model$cluster
+fviz_cluster(kmeans_model, data = iris_data,geom="point",ellipse.type = "convex") + 
+  ggtitle("K Means Clustering on Iris dataset")
+silhouette_score <- silhouette(kmeans_model$cluster, dist(iris_data))
+fviz_silhouette(silhouette_score)
