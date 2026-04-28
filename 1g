@@ -1,0 +1,52 @@
+num_students <- as.integer(readline("Enter number of students: "))
+num_days <- as.integer(readline("Enter number of days per assessment: "))
+num_assessments <- as.integer(readline("Enter number of assessments: "))
+num_months <- as.integer(readline("Enter number of months: "))
+threshold <- as.numeric(readline("Enter minimum marks threshold: "))
+marks_vector <- c()
+for (m in 1:num_months) {
+  cat("\n--- Month", m, "---\n")
+  for (a in 1:num_assessments) {
+    cat("\nEnter marks for Assessment", a, ":\n")
+    for (s in 1:num_students) {
+      cat("Enter marks for Student", s, "for", num_days, "days separated by space:\n")
+      input <- as.numeric(strsplit(readline("1: "), " ")[[1]])
+      cat("Read", length(input), "items\n")
+      marks_vector <- c(marks_vector, input)
+    }
+  }
+}
+marks_array <- array(marks_vector, dim = c(num_days, num_students, num_assessments, num_months))
+dimnames(marks_array) <- list(
+  Day = paste("Day", 1:num_days),
+  Student = paste("Student", 1:num_students),
+  Assessment = paste("Assessment", 1:num_assessments),
+  Month = paste("Month", 1:num_months)
+)
+cat("\nMarks Array (4-D):\n")
+for (m in 1:num_months) {
+  for (a in 1:num_assessments) {
+    cat(", , Assessment", a, ", Month", m, "\n\n")
+    # Transpose for the specific "Student vs Day" table view
+    print(t(marks_array[,,a,m]))
+    cat("\n")
+  }
+}
+cat("Low Marks Records (<", threshold, ") :\n")
+for (m in 1:num_months) {
+  cat("\nFor Month", m, ":\n")
+  for (a in 1:num_assessments) {
+    cat("\nAssessment", a, ":\n")
+    found <- FALSE
+    for (s in 1:num_students) {
+      for (d in 1:num_days) {
+        val <- marks_array[d, s, a, m]
+        if (val < threshold) {
+          cat("Student", s, "Day", d, ":", val, "\n")
+          found <- TRUE
+        }
+      }
+    }
+    if (!found) cat("None\n")
+  }
+}
