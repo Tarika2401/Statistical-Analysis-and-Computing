@@ -1,0 +1,50 @@
+customer_data=data.frame(
+  Age=c(22,35,40,28,50,45,30,55,27,38),
+  Visits=c(2,5,6,3,8,7,4,9,3,6),
+  Gender=c("Male","Female","Female","Male","Female","Male", "Female", "Male", "Male", "Female"),
+Membership=c("Regular", "Gold", "Gold", "Regular", "Gold", "Silver", "Silver", "Gold", "Regular", "Silver"),
+Purchase=c("Low", "High", "High", "Low", "High", "High", "Medium", "High", "Low", "Medium"))
+customer_data
+customer_data$Gender <- as.factor(customer_data$Gender)
+customer_data$Membership <- as.factor(customer_data$Membership)
+customer_data$Purchase <- as.factor(customer_data$Purchase)
+index= sample(1:nrow(customer_data), 0.7* nrow(customer_data))
+train_data= customer_data[index, ]
+test_data =customer_data[-index, ]
+nb_model = naiveBayes(Purchase ~., data= train_data)
+nb_model
+predicted_purchase <- predict(nb_model, test_data)
+predicted_purchase
+confusion_matrix <-table(
+  Actual =test_data$Purchase,
+  Predicted =predicted_purchase )
+confusion_matrix
+accuracy <- sum(diag(confusion_matrix))/sum(confusion_matrix)
+accuracy
+barplot(table(customer_data$Purchase),
+        col=c("skyblue", "orange", "lightgreen"),
+        main ="Purchase Category Distribution",
+        xlab ="Purchase Category",
+        ylab ="Number of Customers")
+plot(customer_data$Age, customer_data$Visits, col=as.numeric(customer_data$Purchase),
+     pch=19,
+     xlab="Age",
+     ylab ="Monthly Visits",
+     main ="Customer Distribution by Purchase Category")
+legend("topleft",
+       legend =levels(customer_data$Purchase),
+       col =1:length(levels(customer_data$Purchase)), pch=19)
+boxplot(Age~Purchase, data =customer_data, col=c("pink", "lightblue", "lightgreen"),
+        main= "Age Distribution by Purchase Category", 
+        xlab= "Purchase Category",
+        ylab= "Age")
+plot(test_data$Age, test_data$Visits,
+     col=as.numeric(predicted_purchase),
+     pch =19,
+     xlab="Age",
+     ylab ="Monthly Visits",
+     main ="Naive Bayes Classification Results")
+legend("topleft",
+       legend =levels(predicted_purchase),
+       col=1:length(levels(predicted_purchase)),
+       pch=19)
