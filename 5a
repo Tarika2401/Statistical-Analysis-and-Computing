@@ -1,0 +1,40 @@
+parking_data=data.frame(
+  distance =c(50,120,80,30,200,60,150,40,100,170),
+  timeofday=c(9,14,11,8,18,10,16,7,13,19),
+  vehicledensity=c(20,60,45,15,80,30,70,10,55,75),
+  parkingduration=c(30,90,60,20,120,45,100,15,70,110),
+  status=c("occupied","occupied","occupied","vacant","occupied","vacant","occupied","vacant","occupied","occupied")  
+)
+parking_data
+features=parking_data[,1:4]
+labels=as.factor(parking_data$status)
+plot(features$timeofday,features$vehicledensity,col=as.numeric(labels),pch=19,xlab="time Of day",ylab="Vehicle Density",main="parking")
+legend("topleft",legend = levels(labels),col=1:2,pch = 19)
+normalize=function(x){
+  (x-min(x)) / (max(x)-min(x))
+}
+features_norm=as.data.frame(lapply(features,normalize))
+index=sample(1:nrow(features_norm),0.7*nrow(features_norm))
+train_data=features_norm[index,]
+test_data=features_norm[-index,]
+train_labels=labels[index]
+test_labels=labels[-index]
+library(class)
+k=3
+predicted_labels=knn(
+  train=train_data,
+  test=test_data,
+  cl=train_labels,
+  k=k
+)
+predicted_labels
+confusion_matrix=table(
+  Actual=test_labels,
+  predicted=predicted_labels
+)
+confusion_matrix
+accuracy=sum(diag(confusion_matrix)) / sum(confusion_matrix)
+accuracy
+plot(test_data$timeofday,test_data$vehicledensity,col=as.numeric(predicted_labels),pch=19,xlab="Time of day",ylab = "vechicle ",main = "knn")
+legend("topleft",legend=levels(labels),col=1:2,pch=19)
+ggpairs(parking_data,columns = 1:4,aes(color=status,alpha=0.7),title="pairwise visualization")
