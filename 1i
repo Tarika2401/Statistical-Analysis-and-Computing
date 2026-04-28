@@ -1,0 +1,34 @@
+num_cars <- as.integer(readline(prompt = "Enter number of cars: "))
+Models <- character(num_cars)
+RegNos <- character(num_cars)
+Prices <- numeric(num_cars)
+Available <- logical(num_cars)
+CarType <- character(num_cars)
+for (i in 1:num_cars) {
+  cat("\nEnter details for Car", i, ":\n")
+  Models[i] <- readline(prompt = "Enter car model: ")
+  RegNos[i] <- readline(prompt = "Enter registration number: ")
+  Prices[i] <- as.numeric(readline(prompt = "Enter price: "))
+  Available[i] <- as.logical(readline(prompt = "Is the car available? (TRUE/FALSE): "))
+  CarType[i] <- readline(prompt = "Enter car type (Sedan/SUV/Hatchback): ")
+}
+CarType <- factor(CarType, levels = c("Sedan", "SUV", "Hatchback"))
+car_df <- data.frame(
+  Model = Models,
+  RegNo = RegNos,
+  Price = Prices,
+  Available = Available,
+  Type = CarType
+)
+cat("\nComplete Car Inventory:\n")
+print(car_df)
+choice <- as.logical(readline(prompt = 
+                                "\nDo you want to see available cars only? (TRUE/FALSE): "))
+if (choice == TRUE) {
+  cat("\nAvailable Cars:\n")
+  print(subset(car_df, Available == TRUE))
+}
+search_type <- readline(prompt = 
+                          "\nEnter car type to search (Sedan/SUV/Hatchback): ")
+cat("\nCars of type", search_type, ":\n")
+print(subset(car_df, Type == search_type))
