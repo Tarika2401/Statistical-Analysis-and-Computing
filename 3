@@ -1,0 +1,56 @@
+sales_data<-data.frame(
+  ProductID=1:8,
+  ProductName=c("Laptop","Mobile","Tablet","Camera","Headphone","Mouse","Keyboard","Charger"),
+  Category=c("Electronics","Electronics","Electronics","Electronics","Accessories","Accessories","Accessories","Accessories"),
+  Region=c("North","South","East","West","North","South","East","West"),
+  MonthlySales=c(50,120,80,30,150,70,60,55),
+  Price=c(700,300,250,400,50,20,30,25)
+)
+str(sales_data)
+summary(sales_data)
+table(sales_data $Category)
+table(sales_data $Region)
+mean_sales=mean(sales_data $MonthlySales)
+median_sales=median(sales_data $ MonthlySales)
+install.packages('modeest')
+library(modeest)
+mode_sales=mfv(sales_data $MonthlySales)
+print(mean_sales)
+print(median_sales)
+print(mode_sales)
+varience_sales=var(sales_data $MonthlySales)
+sd_sales=sd(sales_data $ MonthlySales)
+range_sales=range(sales_data $MonthlySales)
+print(varience_sales)
+print(sd_sales)
+print(range_sales)
+numeric_data=sales_data[,c("MonthlySales","Price")]
+correlation_value=cor(numeric_data$MonthlySales,numeric_data$Price,method="pearson")
+correlation_value
+cor_matrix=cor(numeric_data,method="pearson")
+cor_matrix
+install.packages("corrplot")
+library(corrplot)
+corrplot(cor_matrix,method="number")
+hist(sales_data$MonthlySales,main="Histogram ",xlab = "MonthlySales",ylab="Frequency")
+boxplot(MonthlySales ~ Category,data=sales_data,main="Box Plot",xlab="category",ylab="MonthlySales")
+plot(sales_data$Price,sales_data$MonthlySales,main="Scatter plot",xlab="price",ylab="sales",pch=19)
+abline(lm(MonthlySales ~ Price ,data = sales_data))
+sales_accessory = sales_data$MonthlySales[sales_data$Category == "Accessories"]
+sales_electronics=sales_data$MonthlySales[sales_data$Category == "Electronics"]
+t.test(sales_accessory,sales_electronics)
+anova_model=aov(MonthlySales ~ Region,data=sales_data)
+summary(anova_model)
+var.test(sales_accessory,sales_electronics)
+wilcox.test(sales_accessory,sales_electronics)
+contingency_table=table(sales_data$Category,sales_data$Region)
+fisher.test(contingency_table)
+kruskal.test(MonthlySales ~ Region,data = sales_data)
+bartlett.test(MonthlySales ~ Region,data = sales_data)
+high_sales = ifelse(sales_data$MonthlySales > 100 , 1,0)
+dbinom(0:5,size=5,prob=mean(high_sales))
+lambda=mean(sales_data$MonthlySales)/ 10
+dpois(0:5,lambda = lambda)
+mean_sales = mean(sales_data$MonthlySales)
+sd_sales=sd(sales_data$MonthlySales)
+dnorm(sales_data$MonthlySales,mean= mean_sales,sd = sd_sales)
