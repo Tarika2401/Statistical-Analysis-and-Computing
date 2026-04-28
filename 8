@@ -1,0 +1,25 @@
+data(mtcars)
+head(mtcars)
+set.seed(123)
+train_index <- createDataPartition(mtcars$mpg,p=0.7,list = FALSE)
+train_data <- mtcars[train_index, ]
+test_data  <- mtcars[-train_index, ]
+lm_model <- lm(mpg ~ hp, data = train_data)
+summary(lm_model)
+predictions <- predict(lm_model, newdata = test_data)
+predictions
+mse <- mean((test_data$mpg - predictions)^2)
+mse
+r_squared=cor(test_data$mpg,predictions)^2
+r_squared
+ggplot(train_data, aes(x = hp, y = mpg)) +
+  geom_point(color="blue",size=3) +
+  geom_smooth(method = "lm", color = "blue") +
+  ggtitle("linear regression:hp vs mpg")
+model_multiple <- lm(mpg ~ wt + hp + disp, data = train_data)
+summary(model_multiple)
+pred_multi <- predict(model_multiple, newdata = test_data)
+pred_multi
+scatterplot3d(mtcars$wt, mtcars$hp, mtcars$mpg,      
+              main = "3D Plot: mpg vs wt & hp",
+              xlab = "Weight", ylab = "Horsepower", zlab = "MPG")
