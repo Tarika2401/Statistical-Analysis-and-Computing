@@ -1,0 +1,24 @@
+crop_data = data.frame(
+  temperature = c(25,30,28,35,22,27,33,29,31,24,34,26),
+  humidity = c(80,60,75,55,85,78,50,70,65,88,52,82),
+  rainfall = c(120,40,90,30,150,100,20,85,60,140,25,110),
+  soilmoisture=c("high","medium","high","low","high","high","low","medium","medium","high","low","high"),
+  diseaserisk = c("high","low","high","low","high","high","low","high","low","high","low","high"))
+print(crop_data)
+crop_data$soilmoisture=as.factor(crop_data$soilmoisture)
+crop_data$diseaserisk=as.factor(crop_data$diseaserisk)
+str(crop_data)
+index=sample(1:nrow(crop_data),0.7*nrow(crop_data))
+train_data=crop_data[index,]
+test_data=crop_data[-index,]
+cat("Training",nrow(train_data),"\n")
+cat("Testing",nrow(test_data),"\n")
+disease_tree=rpart(diseaserisk ~ .,data=train_data,method="class",control=rpart.control(minsplit = 2,cp=0))
+print(disease_tree)
+rpart.plot(disease_tree)
+prediction_risk=predict(disease_tree,test_data,type = "class")
+prediction_risk
+confusion_matrix= table(Actual=test_data$diseaserisk,Predicted=prediction_risk)
+confusion_matrix
+accuracy = sum(diag(confusion_matrix))/sum(confusion_matrix)
+print(accuracy)
