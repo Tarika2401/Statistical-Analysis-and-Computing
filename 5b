@@ -1,0 +1,19 @@
+data("iris")
+set.seed(123)
+normalize = function(x){
+  return ((x-min(x))/(max(x)-min(x)))
+}
+iris_norm=as.data.frame(lapply(iris[1:4],normalize))
+iris_norm$Species = iris$Species
+split_index=createDataPartition(iris_norm$Species,p=0.8,list=FALSE)
+train_data=iris_norm[split_index,]
+test_data=iris_norm[-split_index,]
+train_labels=train_data$Species
+test_labels=test_data$Species
+k=5
+knn_predictions=knn(train= train_data[,1:4],test = test_data[,1:4],cl=train_labels,k=k)
+confusion_matrix=confusionMatrix(knn_predictions,test_labels)
+print(confusion_matrix)
+ggplot(iris,aes(x=Sepal.Length,y=Sepal.Width,color=Species))+geom_point(size=3)+labs(title = "Iris Dataset-sepal Length                                                                                    
+vs sepal width",x="sepal length",y="sepal width")+theme_minimal()
+ggpairs(iris,aes(color=Species))
