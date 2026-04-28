@@ -1,0 +1,11 @@
+price=as.numeric(readline("Enter price of item:"))
+quantity=as.numeric(readline("enter quantity purchased:"))
+total_cost=price*quantity
+discount=0
+if(total_cost >500){
+  discount=total_cost / 10
+}
+finalbill=total_cost-discount
+cat("total cost : ",price * quantity)
+cat("\n Dicount : ",discount)
+cat("\n Final bill Amount :",finalbill)
