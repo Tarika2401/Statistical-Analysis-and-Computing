@@ -1,0 +1,36 @@
+num_clients <- as.integer(readline(prompt = "Enter number of clients: "))
+max_days <- as.integer(readline(prompt = "Enter maximum recommended travel days: "))
+itineraries <- list()
+for (i in 1:num_clients) {
+  cat("\nEnter details for Client", i, ":\n")
+  client_name <- readline(prompt = "Enter client name: ")
+  itinerary_id <- readline(prompt = "Enter itinerary ID: ")
+  num_dest <- as.integer(readline(prompt = "Enter number of destinations: ")) 
+  destinations <- character(num_dest)
+  days_spent <- numeric(num_dest)
+  transport <- character(num_dest)
+  for (j in 1:num_dest) {
+    destinations[j] <- readline(prompt = paste("Enter destination", j, "name: "))
+    days_spent[j] <- as.numeric(readline(prompt = paste("Enter number of days in", destinations[j], ": ")))
+    transport[j] <- readline(prompt = paste("Enter mode of transport to", destinations[j], ": "))
+  }
+  client_itinerary <- list(
+    Client = client_name,
+    ID = itinerary_id,
+    Destinations = destinations,
+    Days = days_spent,
+    Transport = transport
+  )
+  itineraries[[i]] <- client_itinerary
+}
+cat("\nTravel Itineraries:\n")
+print(itineraries)
+cat("\nClients with total travel days exceeding", max_days, ":\n")
+for (i in 1:length(itineraries)) {
+  total_days <- sum(itineraries[[i]]$Days)
+  if (total_days > max_days) {
+    cat("Client:", itineraries[[i]]$Client, 
+        "| Itinerary ID:", itineraries[[i]]$ID, 
+        "| Total Days:", total_days, "\n")
+  }
+}
