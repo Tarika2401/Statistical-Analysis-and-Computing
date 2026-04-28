@@ -1,0 +1,33 @@
+fib=function(n){
+  if(n==1){
+    return (0)
+  }else if(n==2){
+    return(1)
+  }else{
+    a=0;
+    b=1;
+    for(i in 3:n){
+      c=a+b
+      a=b
+      b=c
+    }
+    return (b)
+  }
+}
+n=as.integer(readline("enter the number of rows:"))
+for(i in 1:n){
+  for(j in 1:i){
+    cat(fib(j)," ")
+  }
+  cat("\n")
+}
+row=1
+while(row<=n){
+  col=1
+  while(col<=row){
+    cat(fib(col)," ")
+    col=col+1
+  }
+  cat("\n")
+  row=row+1
+}
