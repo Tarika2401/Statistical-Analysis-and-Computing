@@ -1,0 +1,24 @@
+households <- as.integer(readline(prompt = "Enter number of households: "))
+months <- as.integer(readline(prompt = "Enter number of months: "))
+consumption <- matrix(0, nrow = households, ncol = months)
+cat("Enter electricity units:\n")
+for (i in 1:households) {
+  for (j in 1:months) {
+    prompt <- paste("Household", i, "Month", j, ": ")
+    consumption[i, j] <- as.numeric(readline(prompt = prompt))
+  }
+}
+rownames(consumption) <- paste("Household", 1:households)
+colnames(consumption) <- paste("Month", 1:months)
+cat("\nElectricity Consumption Matrix:\n")
+print(consumption)
+row_total <- rowSums(consumption)
+cat("\nRow-wise Total Consumption:\n")
+print(row_total)
+col_avg <- colMeans(consumption)
+cat("\nColumn-wise Average Consumption:\n")
+print(col_avg)
+max_usage <- max(consumption)
+min_usage <- min(consumption)
+cat("\nHighest Electricity Consumption:", max_usage, "\n")
+cat("Lowest Electricity Consumption:", min_usage, "\n")
