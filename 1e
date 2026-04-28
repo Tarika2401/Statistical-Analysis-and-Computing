@@ -1,0 +1,19 @@
+n <- as.integer(readline(prompt = "Enter number of months: "))
+sales <- numeric(n)
+for (i in 1:n) {
+  prompt <- paste("Enter sales for month", i, ": ")
+  sales[i] <- as.numeric(readline(prompt = prompt))
+}
+cat("\nSales Vector: ")
+print(sales)
+total_sales <- sum(sales)
+average_sales <- mean(sales)
+highest_sales <- max(sales)
+lowest_sales <- min(sales)
+cat("Total Sales:", total_sales, "\n")
+cat("Average Sales:", average_sales, "\n")
+cat("Highest Sales:", highest_sales, "\n")
+cat("Lowest Sales:", lowest_sales, "\n")
+above_avg <- sales[sales > average_sales]
+cat("Above Average Sales: ")
+print(above_avg)
